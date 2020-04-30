@@ -66,5 +66,5 @@ app.get('/init', (req, res) => {
 app.get('/stream', sse.init);
 
 app.listen(3000, () => {
-    console.log('API for smart home 1.0 up n running.')
+    console.log('API for Smart Home API 1.0 up and running.')
 })

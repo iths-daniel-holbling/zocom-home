@@ -17,6 +17,8 @@ router.get('/:id/:state', async (req,res) => {
     // Säg åt frontend att uppdatera
     update();
 
+    console.log(`Vacuum with id: ${req.params.id} is now ${req.params.state}`);
+
     res.send({
         msg: `Vacuum with id: ${req.params.id} is now ${req.params.state}`
     })

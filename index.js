@@ -17,6 +17,31 @@ const vacuumsRoute = require('./routes/vacuums');
 
 /* CODE YOUR API HERE */
 
+// Auth middleware - Kolla API-nyckel
+app.use((req,res,next) => {
+    if(req.url === '/' || req.url === '/init' || req.url === '/stream'){
+        next();
+    }else{
+        // kika i headers om API key finns
+        let key = req.headers['authorization'];
+        
+        // Hämta ut databasens keys-array
+        let dbKeys = db.get('keys').value();
+        
+        // kolla ifall den finns i databasen
+        if(dbKeys.includes(key)){
+            console.log("Auth OK.");
+
+            // Ja >>> next()
+            next();
+        }else{
+            
+            // Nej >>> res.status(500).send('No API FOR YOU!')
+            res.status(500).send({msg: 'No API FOR YOU!'})
+        }
+    }
+})
+
 // remote -> API -> db -> update() -> frontend
 
 app.use('/vacuums', vacuumsRoute);

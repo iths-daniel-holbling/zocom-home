@@ -1,3 +1,6 @@
 body {
     background: url('../img/98bg.jpg');
 }
+.window {
+    margin: 20px;
+}

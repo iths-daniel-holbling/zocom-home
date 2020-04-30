@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-    <div class="window acs-window" style="width: 300px">
+    <div id="app-wrapper">
+
+    </div>
+    <!-- <div class="window acs-window" style="width: 300px">
         <div class="title-bar">
             <div class="title-bar-text">ACs</div>
             <div class="title-bar-controls">
-                <!-- <button aria-label="Minimize"></button>
-                <button aria-label="Maximize"></button>
-                <button aria-label="Close"></button> -->
 
             </div>
         </div>
@@ -24,19 +24,25 @@
                 <div class="field-row">
                     <input id="ac1-radio-btn" type="radio" name="ac1-radio-btn">
                     <label for="ac1-radio-btn">AC1</label>
+                    <input id="ac2-radio-btn" type="radio" name="ac2-radio-btn">
+                    <label for="ac2-radio-btn">AC2</label>
                 </div>
             </fieldset>
             <br>
+            <div class="slidecontainer">
+                <input type="range" min="1" max="100" value="50" class="slider">
+                <p class="display-temp"></p>
+            </div>
             <div class="field-row">
-                <label for="temp-text">Temperature</label>
-                <input type="text" id="temp-text">
+                <label for="temp-text">Color</label>
+                <input type="color" id="light-color">
                 <button>Set</button>
             </div>
             <br>
-            <button>On</button>
-            <button>Off</button>
+            <button class="on-btn">On</button>
+            <button class="off-btn">Off</button>
         </div>
-    </div>
+    </div> -->
 
     <script src="./js/main.js"></script>
 </body>

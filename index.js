@@ -48,6 +48,25 @@ app.use((req,res,next) => {
     }
 })
 
+// Get list of devices as JSON
+app.get('/devicelist', (req,res) => {
+    // let bajs = db.get('devices').filter({type:'Light'}).value().map(dev => {
+    //     return dev.id;
+    // });
+    let categories = db.get('categories').value();
+    let response = {};
+    categories.forEach(category => {
+        let devices = db.get('devices').filter({type:category}).value();
+        let cat = category.toLowerCase() + "s";
+        let devs = []
+        devices.forEach(dev => {
+            devs.push(dev.id);
+        });
+        response[cat] = devs;
+    });
+    res.send(response);
+})
+
 // remote -> API -> db -> update() -> frontend
 app.use('/acs', acsRoute);
 app.use('/blinds', blindsRoute);

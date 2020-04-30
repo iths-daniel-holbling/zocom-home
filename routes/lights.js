@@ -42,5 +42,7 @@ router.get('/:id/color/:val', async (req,res) => {
     })
 })
 
+// Gör en GET för brightness
+
 // EXPORT
 module.exports = router;

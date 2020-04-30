@@ -9,10 +9,8 @@ router.get('/:id/:state', async (req,res) => {
     // update db
     db.get( 'devices' ) // ur databasen 'devices'
     .find({ id: id }) // hitta raden med id: id
-    .assign({ on: state }) // ändra parametern "on" till state-värdet
+    .assign({ locked: state }) // ändra parametern "on" till state-värdet
     .value(); // utför ändringen
-
-
 
     // Säg åt frontend att uppdatera
     update();

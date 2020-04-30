@@ -15,6 +15,8 @@ router.get('/:id/power/:state', async (req,res) => {
     // Säg åt frontend att uppdatera
     update();
 
+    console.log(`${req.params.id} is now ${req.params.state}`);
+
     res.send({
         msg: `AC with id: ${req.params.id} is now ${req.params.state}`
     })
@@ -30,6 +32,8 @@ router.get('/:id/temperature/:val', async (req,res) => {
     .value();
 
     update();
+
+    console.log(`Temperature set to ${val} on ${id}`);
 
     res.send({
         msg: `Set temperature to ${val} on AC with id: ${id}`

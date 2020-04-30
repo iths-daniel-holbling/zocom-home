@@ -10,10 +10,16 @@ app.use(cors());
 
 app.use(express.static('public'))
 
+
+// ROUTES
+const vacuumsRoute = require('./routes/vacuums');
+
+
 /* CODE YOUR API HERE */
 
+// remote -> API -> db -> update() -> frontend
 
-
+app.use('/vacuums', vacuumsRoute);
 
 /* CODE YOUR API HERE */
 

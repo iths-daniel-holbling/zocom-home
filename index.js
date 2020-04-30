@@ -8,6 +8,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static('public'))
 
+/* CODE YOUR API HERE */
 
 // ROUTES
 const acsRoute = require('./routes/acs');
@@ -16,10 +17,6 @@ const camerasRoute = require('./routes/cameras');
 const lightsRoute = require('./routes/lights');
 const locksRoute = require('./routes/locks');
 const vacuumsRoute = require('./routes/vacuums');
-
-
-
-/* CODE YOUR API HERE */
 
 // Auth middleware - Kolla API-nyckel
 app.use((req,res,next) => {

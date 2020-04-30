@@ -18,7 +18,7 @@ router.get('/:id/:state', async (req,res) => {
     update();
 
     res.send({
-        msg: `Vacuum with id: ${req.params.id} is now ${req.params.state}`
+        msg: `Lock with id: ${req.params.id} is now ${req.params.state}`
     })
 })
 

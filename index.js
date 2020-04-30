@@ -12,16 +12,26 @@ app.use(express.static('public'))
 
 
 // ROUTES
+const acsRoute = require('./routes/acs');
+const blindsRoute = require('./routes/blinds');
+const camerasRoute = require('./routes/cameras');
+const lightsRoute = require('./routes/lights');
+const locksRoute = require('./routes/locks');
 const vacuumsRoute = require('./routes/vacuums');
+
 
 
 /* CODE YOUR API HERE */
 
 // Auth middleware - Kolla API-nyckel
 app.use((req,res,next) => {
+
     if(req.url === '/' || req.url === '/init' || req.url === '/stream'){
+        
         next();
+
     }else{
+        
         // kika i headers om API key finns
         let key = req.headers['authorization'];
         
@@ -34,6 +44,7 @@ app.use((req,res,next) => {
 
             // Ja >>> next()
             next();
+
         }else{
             
             // Nej >>> res.status(500).send('No API FOR YOU!')
@@ -43,7 +54,11 @@ app.use((req,res,next) => {
 })
 
 // remote -> API -> db -> update() -> frontend
-
+app.use('/acs', acsRoute);
+app.use('/blinds', blindsRoute);
+app.use('/cameras', camerasRoute);
+app.use('/lights', lightsRoute);
+app.use('/locks', locksRoute);
 app.use('/vacuums', vacuumsRoute);
 
 /* CODE YOUR API HERE */

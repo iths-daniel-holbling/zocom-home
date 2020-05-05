@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = new Router();
 const { db, update } = require('./../db'); // iom index.js så behöver vi inte speca filnamnet
 
-router.get('/:id/:state', async (req,res) => {
+router.get('/:id/power/:state', async (req,res) => {
     let id = req.params.id;
     let state = (req.params.state === 'on') ? true : false;
 

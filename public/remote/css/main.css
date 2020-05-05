@@ -3,4 +3,36 @@ body {
 }
 .window {
     margin: 20px;
+    position: absolute;
+    width: 167px;
+}
+
+.AC-window {
+    width: 240px;
+}
+
+.Blind-window {
+    top: 100px;
+    left: 400px;
+}
+
+.Camera-window {
+    top: 400px;
+    left: 50px;
+}
+
+.Light-window {
+    width: 230px;
+    top: 325px;
+    left: 500px;
+}
+
+.Lock-window {
+    top: 600px;
+    left: 150px;
+}
+
+.Vacuum-window {
+    top: 200px;
+    left: 75px;
 }

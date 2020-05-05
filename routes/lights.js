@@ -43,6 +43,26 @@ router.get('/:id/color/:val', async (req,res) => {
 })
 
 // Gör en GET för brightness
+router.get('/:id/brightness/:val', async (req,res) => {
+    let id = req.params.id;
+    let val = req.params.val;
+
+    console.log(val);
+
+    db.get('devices')
+    .find({id:id})
+    .assign({brightness:val})
+    .value();
+
+    update();
+
+    console.log(`Brightness on ${req.params.id} is now ${req.params.val*100}%`);
+
+    res.send({
+        msg: `Brightness on light with id: ${req.params.id} is now ${req.params.val*100}%`
+    })
+})
+
 
 // EXPORT
 module.exports = router;

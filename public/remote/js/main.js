@@ -1,7 +1,7 @@
 const appWrapper = document.querySelector('#app-wrapper');
 
 let getDevices = async () => {
-    let devices = await fetch('http://localhost:3000/devicelist', {
+    let devices = await fetch('/devicelist', {
         headers: {
             'Authorization':'69420lol'
         }
@@ -18,12 +18,14 @@ let crEl = (elType, classes) => {
 }
 
 function markup(arr, type){
+
+    let eventTargets = {type:type};
+
     let lowerCaseType = type.toLowerCase();
     if(type === "AC"){
         lowerCaseType = "AC";
     }
     let windowElement = crEl("div",`window ${type}-window`)
-    windowElement.style.width = "300px";
     appWrapper.appendChild(windowElement);
 
     let titleBar = crEl("div","title-bar");
@@ -43,33 +45,39 @@ function markup(arr, type){
     let fieldSetLegend = crEl("legend");
     fieldSetLegend.innerText = `Which ${lowerCaseType}?`;
     fieldSet.appendChild(fieldSetLegend);
+    
+    let choiceArr = [];
+    let devId = [];
+    
     arr.forEach((item) => {
         let i = item.toLowerCase();
         let fieldRow = crEl("div","field-row");
         fieldRow.innerHTML = `
-            <input id="${i}-radio-btn" type="radio" name="${i}-radio-btn">
+            <input id="${i}-radio-btn" type="radio" name="${type}-radio-btn" value="${item}">
             <label for="${i}-radio-btn">${item}</label>
         `
         fieldSet.appendChild(fieldRow);
+        choiceArr.push(fieldRow);
+        devId.push(item);
     })
+    eventTargets["radioButtons"] = choiceArr;
+    eventTargets["devId"] = devId;
+
 
     let br1 = crEl('br');
     windowBody.appendChild(br1);
 
     // Lägg in element som skiljer sig mellan typer
     if(type === "AC"){
-        let slideContainer = crEl('div', 'slidecontainer');
-        slideContainer.innerHTML = `
-            <input type="range" min="1" max="100" value="50" class="slider">
-            <p class="display-temp"></p>
+        let tempSlider = crEl('div', 'field-row');
+        tempSlider.innerHTML = `
+            <label for='${type}-temp-slider' class="display-temp">Temperature</label>
+            <input type="range" min="16" max="30" value="23" id='${type}-temp-slider'>
+            <span class="temp-text">23C</span>
         `;
-        let temperature = crEl('div','field-row');
-        temperature.innerHTML = `
-            <label for="temp-text">Temperature</label>
-            <input type="text" id="temp-text">
-            <button>Set</button>
-        `
-        windowBody.append(slideContainer,temperature);
+        windowBody.append(tempSlider);
+        eventTargets["tempSlider"] = tempSlider;
+
     }
     if(type === "Blind"){
         
@@ -82,12 +90,19 @@ function markup(arr, type){
         color.innerHTML = `
             <label for="temp-text">Color</label>
             <input type="color" id="light-color">
-            <button>Set</button>
         `
+        eventTargets["color"] = color;
 
-        // Gör en för brightness också
+        let brightness = crEl('div','field-row');
+        brightness.innerHTML = `
+            <label for='${type}-brightness-slider' class="display-temp">Brightness</label>
+            <input type="range" min="1" max="100" value="100" id='${type}-brightness-slider'>
+            <span class="temp-text">100%</span>
+        `;
+        eventTargets["brightness"] = brightness;
 
-        windowBody.append(color);
+        windowBody.append(color, brightness);
+
     }
     if(type === "Lock"){
         
@@ -100,30 +115,124 @@ function markup(arr, type){
 
     let br2 = crEl('br');
     windowBody.appendChild(br2)
+
     let onBtn = crEl('button','on-btn');
     onBtn.innerText = "Turn on";
+    eventTargets["onBtn"] = onBtn;
+
     let offBtn = crEl('button', 'off-btn');
     offBtn.innerText = "Turn off";
+    eventTargets["offBtn"] = offBtn;
+
     windowBody.append(onBtn, offBtn);
 
 
+    return eventTargets;
 
 
 }
 
+let setEventListeners = (devices) => {
+    let type = devices.type.toLowerCase() + "s";
+    console.log(type);
+    let radioArr = document.getElementsByName(`${devices.type}-radio-btn`);
+    
+    
+    devices.onBtn.addEventListener('click', () => {
+        radioArr.forEach(async (btn) => {
+            if(btn.checked === true){
+                await fetch(`/${type}/${btn.value}/power/on`, {
+                    headers: {
+                        'Authorization':'69420lol'
+                    }
+                });
+            }
+        })
+    })
 
+    devices.offBtn.addEventListener('click', () => {
+        radioArr.forEach(async (btn) => {
+            if(btn.checked === true){
+                await fetch(`/${type}/${btn.value}/power/off`, {
+                    headers: {
+                        'Authorization':'69420lol'
+                    }
+                });
+            }
+        })
+    })
+    
+    if(type === "acs"){
+        let temperature = devices.tempSlider.children[1];
+        let tempLabel = devices.tempSlider.children[2];
+        temperature.addEventListener('change', (e) => {
+            radioArr.forEach(async (btn) => {
+                if(btn.checked === true){
+                    await fetch(`/${type}/${btn.value}/temperature/${e.target.value}`, {
+                        headers: {
+                            'Authorization':'69420lol'
+                        }
+                    });
+                }
+            })
+            tempLabel.innerText = e.target.value + "C";
+        })
+    }
+
+    if(type === "lights"){
+
+        let color = devices.color.children[1];
+        console.log(color.value.split('#')[1]);
+        color.addEventListener('change', e => {
+            let val = color.value.split('#')[1];
+            radioArr.forEach(async (btn) => {
+                if(btn.checked === true){
+                    await fetch(`/${type}/${btn.value}/color/${val}`, {
+                        headers: {
+                            'Authorization':'69420lol'
+                        }
+                    });
+                }
+            })
+        })
+
+        let brightness = devices.brightness.children[1];
+        let brightLabel = devices.brightness.children[2];
+        brightness.addEventListener('change', (e) => {
+            radioArr.forEach(async (btn) => {
+                if(btn.checked === true){
+                    await fetch(`/${type}/${btn.value}/brightness/${e.target.value/100}`, {
+                        headers: {
+                            'Authorization':'69420lol'
+                        }
+                    });
+                }
+            })
+            brightLabel.innerText = e.target.value + "%";
+        })
+    }
+    
+    
+    
+
+}
 
 
 (async () => {
     
     let devices = await getDevices();
-    // devices.acs, devices.blinds, devices.cameras, devices.lights, devices.locks, devices.vacuums
-    markup(devices.acs, "AC");
-    markup(devices.blinds, "Blind");
-    markup(devices.cameras, "Camera");
-    markup(devices.lights, "Light");
-    markup(devices.locks, "Lock");
-    markup(devices.vacuums, "Vacuum");
+    let acs = markup(devices.acs, "AC");
+    let blinds = markup(devices.blinds, "Blind");
+    let cameras = markup(devices.cameras, "Camera");
+    let lights = markup(devices.lights, "Light");
+    let locks = markup(devices.locks, "Lock");
+    let vacuums = markup(devices.vacuums, "Vacuum");
+    await setEventListeners(acs);
+    await setEventListeners(blinds);
+    await setEventListeners(cameras);
+    await setEventListeners(lights);
+    await setEventListeners(locks);
+    await setEventListeners(vacuums);
 })()
 
 

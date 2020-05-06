@@ -1,12 +1,17 @@
+const { app } = require('./core'); 
+
+app.listen(3000, () => {
+    console.log('API for smart home 1.1 up n running.')
+})
 const { db, sse, update } = require('./db')
-const express = require('express');
-const cors = require('cors');
+// const express = require('express');
+// const cors = require('cors');
 
-const app = express();
+// const app = express();
 
-app.use(express.json());
-app.use(cors());
-app.use(express.static('public'))
+// app.use(express.json());
+// app.use(cors());
+// app.use(express.static('public'))
 
 /* CODE YOUR API HERE */
 
@@ -77,13 +82,14 @@ app.use('/vacuums', vacuumsRoute);
 
 /* CODE YOUR API HERE */
 
-app.get('/init', (req, res) => {
-    let devices = db.get('devices').value();
-    res.send(JSON.stringify({ devices: devices }));
-})
+// app.get('/init', (req, res) => {
+//     let devices = db.get('devices').value();
+//     res.send(JSON.stringify({ devices: devices }));
+// })
 
-app.get('/stream', sse.init);
+// app.get('/stream', sse.init);
 
-app.listen(3000, () => {
-    console.log('API for Smart Home API 1.0 up and running.')
-})
+// app.listen(3000, () => {
+//     console.log('API for Smart Home API 1.0 up and running.')
+// })
+

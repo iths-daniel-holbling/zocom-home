@@ -127,7 +127,7 @@ function markup(arr, type){
 
 }
 
-let setEventListeners = (devices) => {
+const setEventListeners = (devices) => {
     let type = devices.type.toLowerCase() + "s";
     console.log(type);
     let radioArr = document.getElementsByName(`${devices.type}-radio-btn`);

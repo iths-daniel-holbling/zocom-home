@@ -1,11 +1,12 @@
 const appWrapper = document.querySelector('#app-wrapper');
+const authKey = {
+    headers: {
+        'Authorization':'69420lol'
+    }
+};
 
 let getDevices = async () => {
-    let devices = await fetch('/devicelist', {
-        headers: {
-            'Authorization':'69420lol'
-        }
-    });
+    let devices = await fetch('/devicelist', authKey);
     return devices.json();
 }
 
@@ -20,16 +21,16 @@ let crEl = (elType, classes) => {
 function markup(arr, type){
 
     let eventTargets = {type:type};
-
     let lowerCaseType = type.toLowerCase();
+
     if(type === "AC"){
         lowerCaseType = "AC";
     }
     let windowElement = crEl("div",`window ${type}-window`)
-    appWrapper.appendChild(windowElement);
+    appWrapper.append(windowElement);
 
     let titleBar = crEl("div","title-bar");
-    windowElement.appendChild(titleBar);
+    windowElement.append(titleBar);
 
     let titleBarText = crEl("div", "title-bar-text");
     let titleBarControls = crEl("div", "title-bar-controls");
@@ -37,14 +38,14 @@ function markup(arr, type){
     titleBar.append(titleBarText,titleBarControls);
 
     let windowBody = crEl("div","window-body");
-    windowElement.appendChild(windowBody);
+    windowElement.append(windowBody);
 
     let fieldSet = crEl("fieldset");
-    windowBody.appendChild(fieldSet);
+    windowBody.append(fieldSet);
 
     let fieldSetLegend = crEl("legend");
     fieldSetLegend.innerText = `Which ${lowerCaseType}?`;
-    fieldSet.appendChild(fieldSetLegend);
+    fieldSet.append(fieldSetLegend);
     
     let choiceArr = [];
     let devId = [];
@@ -56,7 +57,7 @@ function markup(arr, type){
             <input id="${i}-radio-btn" type="radio" name="${type}-radio-btn" value="${item}">
             <label for="${i}-radio-btn">${item}</label>
         `
-        fieldSet.appendChild(fieldRow);
+        fieldSet.append(fieldRow);
         choiceArr.push(fieldRow);
         devId.push(item);
     })
@@ -65,9 +66,8 @@ function markup(arr, type){
 
 
     let br1 = crEl('br');
-    windowBody.appendChild(br1);
+    windowBody.append(br1);
 
-    // Lägg in element som skiljer sig mellan typer
     if(type === "AC"){
         let tempSlider = crEl('div', 'field-row');
         tempSlider.innerHTML = `
@@ -79,12 +79,7 @@ function markup(arr, type){
         eventTargets["tempSlider"] = tempSlider;
 
     }
-    if(type === "Blind"){
-        
-    }
-    if(type === "Camera"){
-        
-    }
+
     if(type === "Light"){
         let color = crEl('div','field-row');
         color.innerHTML = `
@@ -114,7 +109,7 @@ function markup(arr, type){
 
 
     let br2 = crEl('br');
-    windowBody.appendChild(br2)
+    windowBody.append(br2)
 
     let onBtn = crEl('button','on-btn');
     onBtn.innerText = "Turn on";
@@ -141,11 +136,7 @@ let setEventListeners = (devices) => {
     devices.onBtn.addEventListener('click', () => {
         radioArr.forEach(async (btn) => {
             if(btn.checked === true){
-                await fetch(`/${type}/${btn.value}/power/on`, {
-                    headers: {
-                        'Authorization':'69420lol'
-                    }
-                });
+                await fetch(`/${type}/${btn.value}/power/on`, authKey);
             }
         })
     })
@@ -153,11 +144,7 @@ let setEventListeners = (devices) => {
     devices.offBtn.addEventListener('click', () => {
         radioArr.forEach(async (btn) => {
             if(btn.checked === true){
-                await fetch(`/${type}/${btn.value}/power/off`, {
-                    headers: {
-                        'Authorization':'69420lol'
-                    }
-                });
+                await fetch(`/${type}/${btn.value}/power/off`, authKey);
             }
         })
     })
@@ -168,11 +155,7 @@ let setEventListeners = (devices) => {
         temperature.addEventListener('change', (e) => {
             radioArr.forEach(async (btn) => {
                 if(btn.checked === true){
-                    await fetch(`/${type}/${btn.value}/temperature/${e.target.value}`, {
-                        headers: {
-                            'Authorization':'69420lol'
-                        }
-                    });
+                    await fetch(`/${type}/${btn.value}/temperature/${e.target.value}`, authKey);
                 }
             })
             tempLabel.innerText = e.target.value + "C";
@@ -187,11 +170,7 @@ let setEventListeners = (devices) => {
             let val = color.value.split('#')[1];
             radioArr.forEach(async (btn) => {
                 if(btn.checked === true){
-                    await fetch(`/${type}/${btn.value}/color/${val}`, {
-                        headers: {
-                            'Authorization':'69420lol'
-                        }
-                    });
+                    await fetch(`/${type}/${btn.value}/color/${val}`, authKey);
                 }
             })
         })
@@ -201,11 +180,7 @@ let setEventListeners = (devices) => {
         brightness.addEventListener('change', (e) => {
             radioArr.forEach(async (btn) => {
                 if(btn.checked === true){
-                    await fetch(`/${type}/${btn.value}/brightness/${e.target.value/100}`, {
-                        headers: {
-                            'Authorization':'69420lol'
-                        }
-                    });
+                    await fetch(`/${type}/${btn.value}/brightness/${e.target.value/100}`, authKey);
                 }
             })
             brightLabel.innerText = e.target.value + "%";

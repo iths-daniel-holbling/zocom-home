@@ -2,18 +2,18 @@ const { Router } = require('express');
 const router = new Router();
 const { db, update } = require('./../db'); // iom index.js så behöver vi inte speca filnamnet
 
+// POWER
 router.get('/:id/power/:state', async (req,res) => {
     let id = req.params.id;
     let state = (req.params.state === 'on') ? true : false;
 
-    // update db
+    // Update DB
     db.get( 'devices' ) // ur databasen 'devices'
     .find({ id: id }) // hitta raden med id: id
     .assign({ on: state }) // ändra parametern "on" till state-värdet
     .value(); // utför ändringen
 
-    // Säg åt frontend att uppdatera
-    update();
+    update(); // Update device frontend
 
     console.log(`${req.params.id} is now ${req.params.state}`)
 
@@ -22,18 +22,18 @@ router.get('/:id/power/:state', async (req,res) => {
     })
 })
 
+// COLOR
 router.get('/:id/color/:val', async (req,res) => {
     let id = req.params.id;
     let val = req.params.val;
 
-    console.log(val);
-
+    // Update DB
     db.get('devices')
     .find({id:id})
     .assign({color:`#${val}`})
     .value();
 
-    update();
+    update(); // Update device frontend
 
     console.log(`Color on ${req.params.id} is now #${req.params.val}`);
 
@@ -42,19 +42,18 @@ router.get('/:id/color/:val', async (req,res) => {
     })
 })
 
-// Gör en GET för brightness
+// BRIGHTNESS
 router.get('/:id/brightness/:val', async (req,res) => {
     let id = req.params.id;
     let val = req.params.val;
 
-    console.log(val);
-
+    // Update DB
     db.get('devices')
     .find({id:id})
     .assign({brightness:val})
     .value();
 
-    update();
+    update(); // Update device frontend
 
     console.log(`Brightness on ${req.params.id} is now ${req.params.val*100}%`);
 
